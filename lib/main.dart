@@ -1,69 +1,59 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:logger/logger.dart';
+import 'package:phone_auth_microservice/domain/core/utilities/logger/simple_log_printer.dart';
+import 'package:phone_auth_microservice/views/core/phone_auth_microservice_app_widget.dart';
 
 void main() {
-  runApp(const MyApp());
+  runZonedGuarded<Future<void>>(
+    () async {
+      FlutterNativeSplash.preserve(
+        widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
+      );
+      await appConfiguration();
+      runApp(const PhoneAuthMicroserviceAppWidget());
+    },
+    (Object error, StackTrace stack) {
+      getLogger().e('‍⛔[CrashEvent] [DEBUG] $error\n$stack');
+    },
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+///app Configuration
+Future<void> appConfiguration() async {
+  try {
+    getLogger().i('appConfiguration Started');
+    prepareTheLogger();
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: <SystemUiOverlay>[
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ],
     );
+    await SystemChrome.setPreferredOrientations(
+      <DeviceOrientation>[DeviceOrientation.portraitUp],
+    );
+    FlutterNativeSplash.remove();
+  } on Exception catch (e) {
+    getLogger().e('Exception Error : $e');
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+///prepare The Logger
+void prepareTheLogger() {
+  try {
+    getLogger().i('prepareTheLogger Started');
+    if (kReleaseMode) {
+      Logger.level = Level.info;
+    } else {
+      Logger.level = Level.debug;
+    }
+  } on Exception catch (error) {
+    getLogger().e('Exception Error: $error');
   }
 }
