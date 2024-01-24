@@ -1,28 +1,62 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
-
-linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
-  rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+
+linter:
+  rules:
+    - avoid_as
+    - avoid_catches_without_on_clauses
+    - avoid_return_types_on_setters
+    - avoid_types_as_parameter_names
+    - cancel_subscriptions
+    - close_sinks
+    - constant_identifier_names
+    - control_flow_in_finally
+    - directives_ordering
+    - empty_constructor_bodies
+    - empty_statements
+    - prefer_single_quotes
+    - sort_unnamed_constructors_first
+    - unawaited_futures
+    - use_rethrow_when_possible
+    - valid_regexps
+    - unnecessary_this
+    - unnecessary_string_escapes
+    - unnecessary_parenthesis
+    - unnecessary_overrides
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_null_checks
+    - unnecessary_null_aware_assignments
+    - unnecessary_new
+    - unnecessary_late
+    - unnecessary_lambdas
+    - unnecessary_getters_setters
+    - unnecessary_constructor_name
+    - unnecessary_brace_in_string_interps
+    - unnecessary_await_in_return
+    - prefer_mixin
+    - prefer_iterable_whereType
+    - prefer_is_not_operator
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - overridden_fields
+    - only_throw_errors
+    - one_member_abstracts
+    - null_closures
+    - null_check_on_nullable_type_parameter
+
+
+analyzer:
+  exclude:
+    - 'build/**'
+    - 'generated/**'
+    - 'lib/**.freezed.dart'
+    - 'lib/**.g.dart'
+    - 'lib/generated/**'
+    - 'lib/views/menu/cws.dart'
+
+dart_style:
+  enabled: true
+  line_length: 120
+  single_quotes: true
