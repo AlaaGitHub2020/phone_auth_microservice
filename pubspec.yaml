@@ -14,6 +14,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   logger: ^2.0.2+1
+  auto_route: ^7.8.4
+  flutter_svg: ^2.0.9
 
 flutter_intl:
   enabled: true
@@ -25,6 +27,8 @@ dev_dependencies:
   intl_utils: ^2.8.7
   flutter_native_splash: ^2.3.9
   flutter_launcher_icons: ^0.13.1
+  auto_route_generator: ^7.3.2
+  build_runner: ^2.4.8
 
 flutter:
   uses-material-design: true
@@ -33,3 +37,13 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/fonts/
+
+
+  fonts:
+    - family: SF-Pro-Display
+      fonts:
+        - asset: assets/fonts/SF-Pro-Display-Regular.otf
+          weight: 400
+        - asset: assets/fonts/SF-Pro-Text-Light.otf
+          weight: 400

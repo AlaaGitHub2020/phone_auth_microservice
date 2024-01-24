@@ -1,3 +1,12 @@
 {
-  "@@locale": "ru"
+  "@@locale": "ru",
+  "byClickingOn": "Нажимая на данную кнопку, вы даете согласие на обработку ",
+  "enterTheCode": "Введите код, который мы отправили в SMS на",
+  "enterYourPhoneNumberToRegister": "Введите номер телефона для регистрации",
+  "personalData": "персональных данных",
+  "phoneNumber": "Номер телефона",
+  "registration": "Регистрация",
+  "secondsUntil": "{number} сек до повтора отправки кода",
+  "sendTheCodeAgain": "Отправить код еще раз",
+  "sendSmsCode": "Отправить смс-код"
 }

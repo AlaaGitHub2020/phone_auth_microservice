@@ -1,3 +1,12 @@
 {
-  "@@locale": "en"
+  "@@locale": "en",
+  "byClickingOn": "By clicking on this button, you consent to the processing of ",
+  "enterTheCode": "Enter the code that we sent via SMS to",
+  "enterYourPhoneNumberToRegister": "Enter your phone number to register",
+  "personalData": "personal data",
+  "phoneNumber": "Phone number",
+  "registration": "Registration",
+  "secondsUntil": "{number} seconds until the code is sent again",
+  "sendTheCodeAgain": "Send the code again",
+  "sendSmsCode": "Send SMS code"
 }
