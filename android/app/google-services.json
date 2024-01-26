@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "639631344301",
+    "project_id": "phone-auth-microservice",
+    "storage_bucket": "phone-auth-microservice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639631344301:android:991aed4c3c94201047bc24",
+        "android_client_info": {
+          "package_name": "ru.alaamashkouk.phone_auth_microservice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR-xjVnY-XmvNulkDB1x1taAq7XCVN04I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

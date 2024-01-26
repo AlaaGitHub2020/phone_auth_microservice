@@ -7,7 +7,7 @@ class StepNumber extends StatelessWidget {
   const StepNumber({required this.stepNumber, required this.active, super.key});
 
   ///Step Number text
-  final String stepNumber;
+  final int stepNumber;
 
   ///Active
   final bool active;
@@ -20,6 +20,7 @@ class StepNumber extends StatelessWidget {
             : Theme.of(context).color.disableButton,
         shape: const CircleBorder(),
         onPressed: null,
-        child: Text(stepNumber, style: Theme.of(context).textTheme.bodySmall),
+        child:
+            Text('$stepNumber', style: Theme.of(context).textTheme.bodySmall),
       );
 }

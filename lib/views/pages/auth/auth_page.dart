@@ -1,111 +1,77 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:phone_auth_microservice/app_logic/auth_ui_logic/auth_ui_logic_bloc.dart';
 import 'package:phone_auth_microservice/domain/core/utilities/constants.dart';
-import 'package:phone_auth_microservice/domain/core/utilities/themes/theme_data_extension.dart';
 import 'package:phone_auth_microservice/generated/l10n.dart';
-import 'package:phone_auth_microservice/views/widgets/custom_input_field/input_field.dart';
-import 'package:phone_auth_microservice/views/widgets/step_number.dart';
+import 'package:phone_auth_microservice/views/pages/auth/widgets/auth_page_body.dart';
+import 'package:phone_auth_microservice/views/routes/router.gr.dart';
+import 'package:phone_auth_microservice/views/widgets/helper_mixin.dart';
 
 ///Auth Page
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatelessWidget with HelperMixin {
   ///Constructor
   const AuthPage({super.key});
 
+  ///AuthUiLogicBloc
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: IconButton(
-            onPressed: () => false,
-            icon: SvgPicture.asset(ViewsConstants.icBack)),
+      child: BlocConsumer<AuthUiLogicBloc, AuthUiLogicState>(
+        listener: (_, AuthUiLogicState authUiLogicState) {
+          authUiLogicState.maybeMap(
+            orElse: () => null,
+            authorizedUser: (_) {
+              context.router.push(const HomeRoute());
+            },
+            errorState: (ErrorState errorState) {
+              return errorState.failure.maybeMap(
+                orElse: () {},
+                fetchCurrentUserFailure: (_) => showErrorMessage(
+                    context, S.current.fetchCurrentUserFailure),
+                firebaseServerFailure: (_) =>
+                    showErrorMessage(context, S.current.firebaseServerFailure),
+                invalidPhoneNumberFailure: (_) => showErrorMessage(
+                    context, S.current.invalidPhoneNumberFailure),
+                tooManyRequestsFailure: (_) =>
+                    showErrorMessage(context, S.current.tooManyRequestsFailure),
+                verifyPhoneNumberFailure: (_) => showErrorMessage(
+                    context, S.current.verifyPhoneNumberFailure),
+              );
+            },
+          );
+        },
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            appBar: buildAppBar(context),
+            body: const AuthPageBody(),
+          );
+        },
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: SizedBox(
-          width: MediaQuery.sizeOf(context).width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.6,
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    StepNumber(active: true, stepNumber: '1'),
-                    StepNumber(active: false, stepNumber: '2'),
-                    StepNumber(active: false, stepNumber: '3'),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.6,
-                child: Column(
-                  children: [
-                    Text(
-                      S.current.registration,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      S.current.enterYourPhoneNumberToRegister,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.displayMedium,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 38),
-              InputField(
-                onChange: (_) {},
-                hint: S.current.phoneNumber,
-                keyboardType: TextInputType.phone,
-                maxLength: 18,
-                initialValue: '+7(',
-              ),
-              const SizedBox(height: 120),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  S.current.sendSmsCode,
-                  style: Theme.of(context)
-                      .textTheme
-                      .displayMedium!
-                      .copyWith(fontSize: 16),
-                ),
-              ),
-              const SizedBox(height: 8),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.6,
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  softWrap: true,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    text: S.current.byClickingOn,
-                    style: Theme.of(context).textTheme.titleSmall,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: S.current.personalData,
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            color: Theme.of(context).color.mainButton),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // Text(S.current.byClickingOn),
-            ],
-          ),
-        ),
-      ),
-    ));
+    );
   }
+
+  ///build App Bar
+  AppBar buildAppBar(BuildContext context) => AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: buildBackBtn(),
+      );
+
+  BlocBuilder<AuthUiLogicBloc, AuthUiLogicState> buildBackBtn() =>
+      BlocBuilder<AuthUiLogicBloc, AuthUiLogicState>(
+        builder: (BuildContext context, AuthUiLogicState authUiLogicState) {
+          return authUiLogicState.maybeWhen(
+            orElse: () => IconButton(onPressed: () => false, icon: buildIcon()),
+            secondStep: (_, __, ___) => IconButton(
+                onPressed: () => context
+                    .read<AuthUiLogicBloc>()
+                    .add(const AuthUiLogicEvent.stepChanged(1)),
+                icon: buildIcon()),
+          );
+        },
+      );
+
+  SvgPicture buildIcon() => SvgPicture.asset(ViewsConstants.icBack);
 }

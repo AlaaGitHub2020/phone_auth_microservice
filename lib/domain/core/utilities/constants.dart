@@ -1,3 +1,11 @@
+///Constants used in the Domain layer
+class DomainConstants {
+  static const String releaseUserCollection = 'release_users';
+  static const String debugUserCollection = 'debug_users';
+  static const String phonePattern =
+      r'^(\+7 \(\d{3}\) \d{3} \d{2} \d{2}|8 \(\d{3}\) \d{3} \d{2} \d{2})$';
+}
+
 ///Constants used in the Views layer
 class ViewsConstants {
   static const String appTitle = 'Phone Auth';
@@ -12,4 +20,5 @@ class ViewsConstants {
   static const String icNext = 'assets/icons/ic_next.svg';
   static const String icProject = 'assets/icons/ic_profile.svg';
   static const String icEdit = 'assets/icons/ic_edit.svg';
+  static const String cPhoneMask = '+7 (###) ### ## ##';
 }
