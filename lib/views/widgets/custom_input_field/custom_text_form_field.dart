@@ -10,6 +10,8 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     required this.onChange,
     required this.inputFormatters,
+    this.enabledBorder,
+    this.hintTextForEdit,
     super.key,
   });
 
@@ -34,6 +36,12 @@ class CustomTextFormField extends StatelessWidget {
   ///input Formatters
   final List<TextInputFormatter>? inputFormatters;
 
+  ///enabled Border
+  final InputBorder? enabledBorder;
+
+  ///hint Text For Edit
+  final String? hintTextForEdit;
+
   @override
   Widget build(BuildContext context) => TextFormField(
         enableSuggestions: false,
@@ -56,12 +64,15 @@ class CustomTextFormField extends StatelessWidget {
   InputDecoration buildInputDecoration(BuildContext context) => InputDecoration(
         filled: true,
         fillColor: Theme.of(context).color.filedFillingColor,
-        labelText: '',
+        labelText: hintTextForEdit ?? '',
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        labelStyle: Theme.of(context)
-            .textTheme
-            .displayMedium!
-            .copyWith(color: Theme.of(context).color.mainText),
+        labelStyle: hintTextForEdit != null
+            ? Theme.of(context).textTheme.displayMedium!.copyWith(
+                color: Theme.of(context).color.configureTextColor, fontSize: 16)
+            : Theme.of(context)
+                .textTheme
+                .displayMedium!
+                .copyWith(color: Theme.of(context).color.mainText),
         counterText: '',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -87,11 +98,12 @@ class CustomTextFormField extends StatelessWidget {
             color: Theme.of(context).color.errorColor,
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(
-            color: Theme.of(context).color.mainButton,
-          ),
-        ),
+        enabledBorder: enabledBorder ??
+            OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide(
+                color: Theme.of(context).color.mainButton,
+              ),
+            ),
       );
 }

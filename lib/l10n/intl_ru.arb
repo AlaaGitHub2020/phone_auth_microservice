@@ -1,12 +1,18 @@
 {
   "@@locale": "ru",
+  "account": "Аккаунт",
   "byClickingOn": "Нажимая на данную кнопку, вы даете согласие на обработку ",
-  "enterTheCode": "Введите код, который мы отправили в SMS на",
+  "configure": "Настроить",
   "enterYourPhoneNumberToRegister": "Введите номер телефона для регистрации",
+  "familyName": "Фамилия",
+  "name": "Имя",
+  "myAccount": "Мой аккаунт",
+  "myProjects": "Мои проекты",
   "personalData": "персональных данных",
   "phoneNumber": "Номер телефона",
   "registration": "Регистрация",
   "secondsUntil": "{number} сек до повтора отправки кода",
   "sendTheCodeAgain": "Отправить код еще раз",
-  "sendSmsCode": "Отправить смс-код"
+  "yourFamily": "Ваша Фамилия",
+  "yourName": "Ваше Имя"
 }

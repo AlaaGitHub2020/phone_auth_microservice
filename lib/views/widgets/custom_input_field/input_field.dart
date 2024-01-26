@@ -16,6 +16,8 @@ class InputField extends StatefulWidget {
     this.validator,
     this.inputFormatters,
     this.maxLength,
+    this.enabledBorder,
+    this.hintTextForEdit,
     super.key,
   });
 
@@ -43,6 +45,12 @@ class InputField extends StatefulWidget {
   ///maxLength
   final int? maxLength;
 
+  ///enabled Border
+  final InputBorder? enabledBorder;
+
+  ///hint Text For Edit
+  final String? hintTextForEdit;
+
   @override
   State<InputField> createState() => _InputFieldState();
 }
@@ -66,50 +74,41 @@ class _InputFieldState extends State<InputField> {
   final TextEditingController controller = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Container(
-        height: 72,
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        alignment: Alignment.bottomCenter,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buildHint(context),
-            SizedBox(
-              height: 46,
-              child: CustomTextFormField(
-                keyboardType: widget.keyboardType,
-                controller: controller,
-                maxLength: widget.maxLength,
-                onChange: widget.onChange,
-                inputFormatters: widget.inputFormatters,
-                validator: widget.validator,
-                autofocus: widget.autofocus,
+  Widget build(BuildContext context) => widget.hintTextForEdit != null
+      ? buildCustomTextFormField()
+      : Container(
+          height: 72,
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          alignment: Alignment.bottomCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildHint(context),
+              SizedBox(
+                height: 46,
+                child: buildCustomTextFormField(),
               ),
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+
+  ///build Custom Text Form Field
+  CustomTextFormField buildCustomTextFormField() {
+    return CustomTextFormField(
+      keyboardType: widget.keyboardType,
+      controller: controller,
+      maxLength: widget.maxLength,
+      onChange: widget.onChange,
+      inputFormatters: widget.inputFormatters,
+      validator: widget.validator,
+      autofocus: widget.autofocus,
+      enabledBorder: widget.enabledBorder,
+      hintTextForEdit: widget.hintTextForEdit,
+    );
+  }
 
   ///build Hint Text
   Text buildHint(BuildContext context) =>
       Text(widget.hint ?? '', style: Theme.of(context).textTheme.titleMedium);
-
-  ///build Text Form Field
-// TextFormField buildTextFormField(BuildContext context) => TextFormField(
-//   enableSuggestions: false,
-//   autocorrect: false,
-//   validator: widget.validator,
-//   cursorColor: Theme.of(context).color.mainText,
-//   cursorWidth: 1.5,
-//   textAlignVertical: TextAlignVertical.top,
-//   decoration: buildInputDecoration(context),
-//   style: Theme.of(context).textTheme.bodyMedium,
-//   maxLength: widget.maxLength,
-//   keyboardType: widget.keyboardType,
-//   autofocus: widget.autofocus,
-//   controller: controller,
-//   onChanged: widget.onChange,
-//   inputFormatters: widget.inputFormatters,
-// );
 }

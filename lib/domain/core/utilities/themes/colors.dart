@@ -9,9 +9,14 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
     required this.mainButton,
     required this.disableButton,
     required this.mainBackground,
+    required this.secondBackground,
     required this.errorColor,
     required this.filedFillingColor,
     required this.filedDisabledBorderColor,
+    required this.bottomNavigationBarItemActiveColor,
+    required this.titleTextColor,
+    required this.avatarColor,
+    required this.configureTextColor,
   });
 
   final Color mainText;
@@ -19,9 +24,14 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
   final Color mainButton;
   final Color disableButton;
   final Color mainBackground;
+  final Color secondBackground;
   final Color errorColor;
   final Color filedFillingColor;
   final Color filedDisabledBorderColor;
+  final Color bottomNavigationBarItemActiveColor;
+  final Color titleTextColor;
+  final Color avatarColor;
+  final Color configureTextColor;
 
   @override
   ThemeExtension<ThemeColors> lerp(
@@ -38,11 +48,19 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
       mainButton: Color.lerp(mainButton, other.mainButton, t)!,
       disableButton: Color.lerp(disableButton, other.disableButton, t)!,
       mainBackground: Color.lerp(mainBackground, other.mainBackground, t)!,
+      secondBackground: Color.lerp(secondBackground, other.secondBackground, t)!,
       errorColor: Color.lerp(errorColor, other.errorColor, t)!,
       filedFillingColor:
           Color.lerp(filedFillingColor, other.filedFillingColor, t)!,
       filedDisabledBorderColor: Color.lerp(
           filedDisabledBorderColor, other.filedDisabledBorderColor, t)!,
+      bottomNavigationBarItemActiveColor: Color.lerp(
+          bottomNavigationBarItemActiveColor,
+          other.bottomNavigationBarItemActiveColor,
+          t)!,
+      titleTextColor: Color.lerp(titleTextColor, other.titleTextColor, t)!,
+      avatarColor: Color.lerp(avatarColor, other.avatarColor, t)!,
+      configureTextColor: Color.lerp(configureTextColor, other.configureTextColor, t)!,
     );
   }
 

@@ -1,12 +1,18 @@
 {
   "@@locale": "en",
+  "account": "Account",
   "byClickingOn": "By clicking on this button, you consent to the processing of ",
-  "enterTheCode": "Enter the code that we sent via SMS to",
+  "configure": "Configure",
   "enterYourPhoneNumberToRegister": "Enter your phone number to register",
+  "familyName": "Family name",
+  "name": "Name",
+  "myAccount": "My account",
+  "myProjects": "My projects",
   "personalData": "personal data",
   "phoneNumber": "Phone number",
   "registration": "Registration",
   "secondsUntil": "{number} seconds until the code is sent again",
   "sendTheCodeAgain": "Send the code again",
-  "sendSmsCode": "Send SMS code"
+  "yourFamily": "Your Family",
+  "yourName": "Your name"
 }

@@ -1,0 +1,10 @@
+part of 'home_ui_logic_bloc.dart';
+
+@freezed
+class HomeUiLogicEvent with _$HomeUiLogicEvent {
+  const factory HomeUiLogicEvent.toggleTap({int? tabNumber}) = _ToggleTap;
+
+  const factory HomeUiLogicEvent.editNamePressed() = _EditNamePressed;
+
+  const factory HomeUiLogicEvent.editFamilyPressed() = _EditFamilyPressed;
+}

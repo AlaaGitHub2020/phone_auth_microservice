@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:phone_auth_microservice/domain/core/utilities/logger/simple_log_printer.dart';
 import 'package:phone_auth_microservice/views/core/phone_auth_microservice_app_widget.dart';
@@ -28,6 +29,7 @@ Future<void> appConfiguration() async {
   try {
     getLogger().i('appConfiguration Started');
     prepareTheLogger();
+    configureInjection(Environment.prod);
     await SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: <SystemUiOverlay>[
