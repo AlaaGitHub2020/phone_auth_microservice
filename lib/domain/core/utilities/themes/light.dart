@@ -77,6 +77,12 @@ ThemeData hotelsExplorationLight = ThemeData(
       fontFamily: 'SF-Pro-Display',
       color: Color.fromRGBO(79, 79, 79, 1),
     ),
+    bodyLarge: TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 20,
+      fontFamily: 'SF-Pro-Display',
+      color: Color.fromRGBO(0, 152, 238, 1),
+    ),
   ),
   extensions: const <ThemeExtension<dynamic>>[
     ThemeColors(
@@ -93,6 +99,7 @@ ThemeData hotelsExplorationLight = ThemeData(
       titleTextColor: Color.fromRGBO(77, 77, 77, 1),
       avatarColor: Color.fromRGBO(227, 227, 227, 1),
       configureTextColor: Color.fromRGBO(198, 198, 200, 1),
+      bottomSheetTextColor: Color.fromRGBO(125, 125, 125, 1),
     ),
   ],
 );

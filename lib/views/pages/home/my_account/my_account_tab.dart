@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phone_auth_microservice/app_logic/home_ui_logic/home_ui_logic_bloc.dart';
 import 'package:phone_auth_microservice/domain/core/utilities/themes/theme_data_extension.dart';
-import 'package:phone_auth_microservice/generated/l10n.dart';
 import 'package:phone_auth_microservice/views/pages/home/edit_family/edit_family.dart';
 import 'package:phone_auth_microservice/views/pages/home/edit_name/edit_name.dart';
 import 'package:phone_auth_microservice/views/pages/home/my_account/account_avatar.dart';
-
-import 'account_configure_btn.dart';
+import 'package:phone_auth_microservice/views/pages/home/my_account/family_name_text.dart';
+import 'package:phone_auth_microservice/views/pages/home/my_account/first_name_text.dart';
 
 ///My Account Tab
 class MyAccountTab extends StatelessWidget {
@@ -50,27 +49,20 @@ class MyAccountTab extends StatelessWidget {
           const SizedBox(height: 24),
           Container(
             color: Theme.of(context).color.secondBackground,
-            child: Column(
-              children: [
-                AccountConfigureBtn(
-                    whatToConfigure: S.current.name,
-                    onTap: () {
-                      context
-                          .read<HomeUiLogicBloc>()
-                          .add(const HomeUiLogicEvent.editNamePressed());
-                    }),
-                AccountConfigureBtn(
-                    whatToConfigure: S.current.familyName,
-                    onTap: () {
-                      context
-                          .read<HomeUiLogicBloc>()
-                          .add(const HomeUiLogicEvent.editFamilyPressed());
-                    }),
-              ],
+            child: const Column(
+              children: [FirstNameText(), FamilyNameText()],
             ),
           ),
         ],
       );
 
-  Text buildEmailText() => const Text('apollo@gmail.com');
+  BlocBuilder<HomeUiLogicBloc, HomeUiLogicState> buildEmailText() =>
+      BlocBuilder<HomeUiLogicBloc, HomeUiLogicState>(
+        builder: (BuildContext context, HomeUiLogicState homeUiLogicState) {
+          return Text((homeUiLogicState.userModel.emailAddress != null &&
+                  homeUiLogicState.userModel.emailAddress!.isNotEmpty)
+              ? homeUiLogicState.userModel.emailAddress!
+              : 'apollo@gmail.com');
+        },
+      );
 }

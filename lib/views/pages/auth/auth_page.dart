@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:phone_auth_microservice/app_logic/auth_ui_logic/auth_ui_logic_bloc.dart';
+import 'package:phone_auth_microservice/app_logic/home_ui_logic/home_ui_logic_bloc.dart';
 import 'package:phone_auth_microservice/domain/core/utilities/constants.dart';
 import 'package:phone_auth_microservice/generated/l10n.dart';
 import 'package:phone_auth_microservice/views/pages/auth/widgets/auth_page_body.dart';
@@ -23,6 +24,8 @@ class AuthPage extends StatelessWidget with HelperMixin {
           authUiLogicState.maybeMap(
             orElse: () => null,
             authorizedUser: (_) {
+              context.read<HomeUiLogicBloc>().add(HomeUiLogicEvent.getUser(
+                  phoneNumber: authUiLogicState.userModel.phoneNumber));
               context.router.push(const HomeRoute());
             },
             errorState: (ErrorState errorState) {
@@ -38,6 +41,12 @@ class AuthPage extends StatelessWidget with HelperMixin {
                     showErrorMessage(context, S.current.tooManyRequestsFailure),
                 verifyPhoneNumberFailure: (_) => showErrorMessage(
                     context, S.current.verifyPhoneNumberFailure),
+                waitingForSMSFailure: (_) => showErrorMessage(
+                    context, S.current.codeSentPleaseWaitForIt),
+                codeAutoRetrievalTimeout: (_) => showErrorMessage(
+                    context, S.current.codeAutoRetrievalTimeout),
+                verificationNotCompleted: (_) => showErrorMessage(
+                    context, S.current.verificationNotCompleted),
               );
             },
           );
@@ -56,22 +65,14 @@ class AuthPage extends StatelessWidget with HelperMixin {
   ///build App Bar
   AppBar buildAppBar(BuildContext context) => AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: buildBackBtn(),
+        leading: buildBackBtn(context),
       );
 
-  BlocBuilder<AuthUiLogicBloc, AuthUiLogicState> buildBackBtn() =>
-      BlocBuilder<AuthUiLogicBloc, AuthUiLogicState>(
-        builder: (BuildContext context, AuthUiLogicState authUiLogicState) {
-          return authUiLogicState.maybeWhen(
-            orElse: () => IconButton(onPressed: () => false, icon: buildIcon()),
-            secondStep: (_, __, ___) => IconButton(
-                onPressed: () => context
-                    .read<AuthUiLogicBloc>()
-                    .add(const AuthUiLogicEvent.stepChanged(1)),
-                icon: buildIcon()),
-          );
-        },
-      );
+  IconButton buildBackBtn(BuildContext context) => IconButton(
+      onPressed: () => context
+          .read<AuthUiLogicBloc>()
+          .add(const AuthUiLogicEvent.stepChanged(1)),
+      icon: buildIcon());
 
   SvgPicture buildIcon() => SvgPicture.asset(ViewsConstants.icBack);
 }

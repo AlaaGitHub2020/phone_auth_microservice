@@ -20,7 +20,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           selectedItemColor:
               Theme.of(context).color.bottomNavigationBarItemActiveColor,
           currentIndex:
-              (homeUiLogicState == const HomeUiLogicState.myProjects()) ? 0 : 1,
+              (homeUiLogicState is MyProjectsState) ? 0 : 1,
           onTap: (index) {
             context
                 .read<HomeUiLogicBloc>()

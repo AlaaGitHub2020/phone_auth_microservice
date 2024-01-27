@@ -17,6 +17,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
     required this.titleTextColor,
     required this.avatarColor,
     required this.configureTextColor,
+    required this.bottomSheetTextColor,
   });
 
   final Color mainText;
@@ -32,6 +33,7 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
   final Color titleTextColor;
   final Color avatarColor;
   final Color configureTextColor;
+  final Color bottomSheetTextColor;
 
   @override
   ThemeExtension<ThemeColors> lerp(
@@ -48,7 +50,8 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
       mainButton: Color.lerp(mainButton, other.mainButton, t)!,
       disableButton: Color.lerp(disableButton, other.disableButton, t)!,
       mainBackground: Color.lerp(mainBackground, other.mainBackground, t)!,
-      secondBackground: Color.lerp(secondBackground, other.secondBackground, t)!,
+      secondBackground:
+          Color.lerp(secondBackground, other.secondBackground, t)!,
       errorColor: Color.lerp(errorColor, other.errorColor, t)!,
       filedFillingColor:
           Color.lerp(filedFillingColor, other.filedFillingColor, t)!,
@@ -60,7 +63,10 @@ class ThemeColors extends ThemeExtension<ThemeColors> {
           t)!,
       titleTextColor: Color.lerp(titleTextColor, other.titleTextColor, t)!,
       avatarColor: Color.lerp(avatarColor, other.avatarColor, t)!,
-      configureTextColor: Color.lerp(configureTextColor, other.configureTextColor, t)!,
+      configureTextColor:
+          Color.lerp(configureTextColor, other.configureTextColor, t)!,
+      bottomSheetTextColor:
+          Color.lerp(bottomSheetTextColor, other.bottomSheetTextColor, t)!,
     );
   }
 

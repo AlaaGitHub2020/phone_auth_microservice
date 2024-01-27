@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phone_auth_microservice/app_logic/home_ui_logic/home_ui_logic_bloc.dart';
+import 'package:phone_auth_microservice/generated/l10n.dart';
 import 'package:phone_auth_microservice/views/pages/home/my_account/my_account_tab.dart';
 
 ///Home Page
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
         builder: (_, HomeUiLogicState homeUiLogicState) =>
             homeUiLogicState.maybeMap(
           orElse: () => const MyAccountTab(),
-          myProjects: (_) => Container(),
+          myProjects: (_) => Center(child: Text(S.current.myProjects)),
           myAccount: (_) => const MyAccountTab(),
         ),
       );

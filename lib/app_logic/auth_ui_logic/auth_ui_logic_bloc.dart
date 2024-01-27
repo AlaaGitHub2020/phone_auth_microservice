@@ -10,6 +10,7 @@ import 'package:phone_auth_microservice/domain/core/utilities/logger/simple_log_
 import 'package:phone_auth_microservice/domain/models/auth/auth_failure.dart';
 import 'package:phone_auth_microservice/domain/models/auth/i_auth_repository.dart';
 import 'package:phone_auth_microservice/domain/models/auth/user_model.dart';
+import 'package:pinput/pinput.dart';
 
 part 'auth_ui_logic_bloc.freezed.dart';
 
@@ -55,38 +56,29 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
             getLogger().i('sendCodePressed Started');
             emit(AuthUiLogicState.secondStep(state.userModel, 60, _controller));
             _startTimer(60);
-            await _firebaseAuth.verifyPhoneNumber(
-              phoneNumber: state.userModel.phoneNumber,
-              timeout: const Duration(milliseconds: 10),
-              verificationCompleted:
-                  (PhoneAuthCredential phoneAuthCredential) async {
-                Either<AuthFailure, UserModel> userModelOrFailure =
-                    await _iAuthRepository.verificationCompleted(
-                        phoneAuthCredential,
-                        state.userModel.phoneNumber,
-                        _controller);
-                getLogger().i(
-                    'userModelOrFailure from verificationCompleted:$userModelOrFailure');
-              },
-              verificationFailed:
-                  (FirebaseAuthException firebaseAuthException) async {
-                Either<AuthFailure, UserModel> userModelOrFailure =
-                    await _iAuthRepository
-                        .verificationFailed(firebaseAuthException);
-                getLogger().i(
-                    'userModelOrFailure from verificationFailed:$userModelOrFailure');
-              },
-              codeSent: (String verificationId, int? resendToken) async {
-                Either<AuthFailure, UserModel> userModelOrFailure =
-                    await _iAuthRepository.codeSent(verificationId, resendToken,
-                        null, state.userModel.phoneNumber);
-                getLogger()
-                    .i('userModelOrFailure from codeSent:$userModelOrFailure');
-              },
-              codeAutoRetrievalTimeout: (String verificationId) {
-                getLogger().i('codeAutoRetrievalTimeout :$verificationId');
-              },
-            );
+            add(const AuthUiLogicEvent.smsCodeFilled());
+          },
+
+          ///verifying Phone Number
+          verifyingPhoneNumber: (_VerifyingPhoneNumber event) async {
+            getLogger().i('verifyingPhoneNumber Started');
+            if (_controller.text.isNotEmpty &&
+                _controller.text.length == 6 &&
+                _verificationId != null) {
+              Either<AuthFailure, UserModel> userOrFailure =
+                  await _iAuthRepository.signInWithCredential(
+                      _verificationId!, _controller.text);
+              userOrFailure.fold((AuthFailure failure) {
+                getLogger().e('failure$failure');
+                emit(AuthUiLogicState.errorState(
+                    state.userModel, failure, _controller));
+              }, (UserModel userModel) {
+                getLogger().e('userModel $userModel');
+                emit(AuthUiLogicState.authorizedUser(userModel));
+              });
+            } else {
+              _controller.setText('');
+            }
           },
 
           ///smsCodeTimerTick
@@ -104,11 +96,14 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
 
           ///smsCodeFilled
           smsCodeFilled: (_SmsCodeFilled event) async {
-            getLogger().i('smsCodeTimerTick Started : ${event.code}');
-            _timer?.cancel();
-            emit(AuthUiLogicState.thirdStep(state.userModel));
-            getLogger().i('smsCodeTimerTick Started : ${event.code}');
+            getLogger().i('smsCodeTimerTick Started : ${_controller.text}');
+            if (_controller.text.length == 6) {
+              _timer?.cancel();
+              emit(AuthUiLogicState.thirdStep(state.userModel));
+              add(const AuthUiLogicEvent.verifyingPhoneNumber());
 
+              return;
+            }
             final Completer<void> verificationCompleter = Completer<void>();
 
             final subscription = verificationStream.listen(
@@ -120,7 +115,8 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
                   },
                   (UserModel userModel) {
                     getLogger().e('userModel $userModel');
-                    emit(AuthUiLogicState.authorizedUser(userModel));
+                    add(const AuthUiLogicEvent.verifyingPhoneNumber());
+                    verificationCompleter.complete();
                   },
                 );
               },
@@ -130,11 +126,11 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
               timeout: const Duration(seconds: 60),
               verificationCompleted:
                   (PhoneAuthCredential phoneAuthCredential) async {
+                _controller.setText(phoneAuthCredential.smsCode!);
                 Either<AuthFailure, UserModel> userModelOrFailure =
-                    await _iAuthRepository.verificationCompleted(
-                        phoneAuthCredential,
-                        state.userModel.phoneNumber,
-                        _controller);
+                    await _iAuthRepository.signInWithCredential(
+                        phoneAuthCredential.signInMethod,
+                        phoneAuthCredential.smsCode!);
                 getLogger().i(
                     'userModelOrFailure from verificationCompleted:$userModelOrFailure');
                 userModelOrFailure.fold(
@@ -142,12 +138,10 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
                     getLogger().e('failure:$failure');
                     _streamController.add(left(AuthUiLogicState.errorState(
                         state.userModel, failure, _controller)));
-                    verificationCompleter.complete();
                   },
                   (UserModel userModel) {
                     getLogger().i('userModel:$userModel');
                     _streamController.add(right(userModel));
-                    verificationCompleter.complete();
                   },
                 );
               },
@@ -164,33 +158,17 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
                     getLogger().e('failure:$failure');
                     _streamController.add(left(AuthUiLogicState.errorState(
                         state.userModel, failure, _controller)));
-                    verificationCompleter.complete();
                   },
                   (UserModel userModel) {
                     getLogger().i('userModel:$userModel');
-                    verificationCompleter.complete();
                   },
                 );
               },
               codeSent: (String verificationId, int? resendToken) async {
-                Either<AuthFailure, UserModel> userModelOrFailure =
-                    await _iAuthRepository.codeSent(verificationId, resendToken,
-                        event.code, state.userModel.phoneNumber);
-                getLogger()
-                    .i('userModelOrFailure from codeSent:$userModelOrFailure');
-                userModelOrFailure.fold(
-                  (AuthFailure failure) {
-                    getLogger().e('failure:$failure');
-                    _streamController.add(left(AuthUiLogicState.errorState(
-                        state.userModel, failure, _controller)));
-                    verificationCompleter.complete();
-                  },
-                  (UserModel userModel) {
-                    getLogger().i('userModel:$userModel');
-                    _streamController.add(right(userModel));
-                    verificationCompleter.complete();
-                  },
-                );
+                _verificationId = verificationId;
+                getLogger().i('resendToken :$resendToken');
+                getLogger().i('verificationId :$verificationId');
+                getLogger().i('_verificationId :$_verificationId');
               },
               codeAutoRetrievalTimeout: (String verificationId) {
                 getLogger().i('codeAutoRetrievalTimeout :$verificationId');
@@ -243,4 +221,6 @@ class AuthUiLogicBloc extends Bloc<AuthUiLogicEvent, AuthUiLogicState> {
   final IAuthRepository _iAuthRepository;
 
   Timer? _timer;
+
+  String? _verificationId;
 }

@@ -14,6 +14,7 @@ class StepNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FloatingActionButton(
+        heroTag: stepNumber,
         elevation: 0,
         backgroundColor: active
             ? Theme.of(context).color.mainButton

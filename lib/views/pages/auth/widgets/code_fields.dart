@@ -41,10 +41,7 @@ class _CodeFieldsState extends State<CodeFields> {
                   onCompleted: (String value) {
                     context
                         .read<AuthUiLogicBloc>()
-                        .add(const AuthUiLogicEvent.stepChanged(3));
-                    context
-                        .read<AuthUiLogicBloc>()
-                        .add(AuthUiLogicEvent.smsCodeFilled(value));
+                        .add(const AuthUiLogicEvent.smsCodeFilled());
                   },
                 ),
             secondStep: (__, int _, TextEditingController controller) {
@@ -61,10 +58,7 @@ class _CodeFieldsState extends State<CodeFields> {
                 onCompleted: (String value) {
                   context
                       .read<AuthUiLogicBloc>()
-                      .add(const AuthUiLogicEvent.stepChanged(3));
-                  context
-                      .read<AuthUiLogicBloc>()
-                      .add(AuthUiLogicEvent.smsCodeFilled(value));
+                      .add(const AuthUiLogicEvent.smsCodeFilled());
                 },
               );
             });

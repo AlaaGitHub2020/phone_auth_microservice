@@ -16,4 +16,9 @@ mixin HelperMixin {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  ///build BoxDecoration
+  BoxDecoration buildBoxDecoration(BuildContext context) => BoxDecoration(
+      color: Theme.of(context).color.secondBackground,
+      borderRadius: const BorderRadius.all(Radius.circular(13)));
 }

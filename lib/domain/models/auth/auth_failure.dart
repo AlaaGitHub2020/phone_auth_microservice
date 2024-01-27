@@ -9,6 +9,9 @@ abstract class AuthFailure with _$AuthFailure {
   const factory AuthFailure.verificationNotCompleted() =
       _VerificationNotCompleted;
 
+  const factory AuthFailure.codeAutoRetrievalTimeout() =
+      _CodeAutoRetrievalTimeout;
+
   const factory AuthFailure.firebaseServerFailure() = _FirebaseServerFailure;
 
   const factory AuthFailure.invalidPhoneNumberFailure() =

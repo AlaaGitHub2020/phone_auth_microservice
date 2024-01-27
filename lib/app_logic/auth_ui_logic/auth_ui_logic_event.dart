@@ -15,5 +15,7 @@ class AuthUiLogicEvent with _$AuthUiLogicEvent {
 
   const factory AuthUiLogicEvent.reSendCodePressed() = _ReSendCodePressed;
 
-  const factory AuthUiLogicEvent.smsCodeFilled(String code) = _SmsCodeFilled;
+  const factory AuthUiLogicEvent.smsCodeFilled() = _SmsCodeFilled;
+
+  const factory AuthUiLogicEvent.verifyingPhoneNumber() = _VerifyingPhoneNumber;
 }
